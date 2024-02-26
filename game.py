@@ -32,7 +32,10 @@ class Game:
             self.view.set_state("prompting_user")
             res = self.controller.get_move()
             if not res:
+                os.system("clear")
                 self.view.set_state("showing_help")
+                self.view.set_state("prompting_user")
+                res = self.controller.get_move()
             else:
                 self.controller.update_board(res)
                 # Here we can implement controller states: play, win, tie

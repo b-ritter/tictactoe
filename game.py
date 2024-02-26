@@ -23,7 +23,6 @@ class Game:
             if not res:
                 self.view.set_state("showing_help")
             else:
-                #breakpoint()
                 self.controller.update_board(res)
                 # Here we can implement controller states: play, win, tie
                 result = self.controller.check_for_win_or_tie()

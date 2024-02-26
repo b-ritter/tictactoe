@@ -1,7 +1,6 @@
 
 class Model:
     def __init__(self):
-        # Could set current player as state variable
         self.num_rows = 3
         self.num_cols = 3
         self.board = [0]*self.num_rows*self.num_cols
@@ -15,7 +14,7 @@ class Model:
 
     def get_row(self,rownum):
         res = []
-        start_idx = (rownum - 1) * self.num_cols
+        start_idx = rownum * self.num_cols
         for col in range(self.num_cols):
            res.append(self.board[start_idx + col])
         return res
@@ -23,7 +22,7 @@ class Model:
     def get_col(self, colnum):
         res = []
         for r in range(self.num_rows):
-            res.append(self.board[r * self.num_rows + (colnum - 1)])
+            res.append(self.board[r * self.num_rows + colnum])
         return res
 
     def get_val(self, row, col):
@@ -46,7 +45,7 @@ class Model:
 
     def set_val(self, row, col, val):
         # Row, col are 0 indexed
-        if (row > self.num_rows) or (col > self.num_cols):
+        if (row >= self.num_rows) or (col >= self.num_cols):
             raise ValueError
         self.board[row * self.num_rows + col] = val
 

@@ -12,8 +12,19 @@ class Game:
         self.view = View(self.controller)
         self.loop()
 
+    def set_state(self, state):
+        if state == "showing_winner":
+            self.view.set_state("showing_winner")
+        if state == "showing_tie":
+            self.view.set_state("showing_tie")
     def loop(self):
-        # Could track overall state
+        # Game states
+        # * Prompting user to move
+        # * Showing results of move
+        # * Showing hint
+        # * Prompting user to play again
+        # * Showing results of finished game
+        # * Display game result (win or tie)
         winner_or_tie = False
         while not winner_or_tie:
             os.system("clear")
@@ -30,7 +41,7 @@ class Game:
                     winner_or_tie = result
                     os.system("clear")
                     self.view.set_state("showing_board")
-                if result == "WIN": 
+                if result == "WIN":
                     self.view.set_state("showing_winner")
                     break
                 elif result == "TIE":

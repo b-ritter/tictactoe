@@ -2,25 +2,28 @@ from copy import deepcopy
 
 class View:
     data = None
+    message = None
 
     def __init__(self, controller):
         self.controller = controller
         
     def set_state(self, state):
         if state == "showing_board":
-            self.data = self.draw_board() 
-        if state == "prompting_user":
-            self.data = self.prompt_next_move()
+            self.data = self.draw_board()
+            self.message = lambda: self.controller.get_move(self.prompt_next_move())
         if state == "showing_winner":
             player = self.controller.get_player_rep(
                 self.controller.get_current_player()
             )
-            self.data = f"The winner is {player}"
+            self.data = self.draw_board()
+            self.message = lambda: print(f"The winner is {player}")
         if state == "showing_tie":
-            self.data = "It's a tie!"
+            self.data = self.draw_board()
+            self.message = lambda: print("It's a tie")
         if state == "showing_help":
             self.data = self.show_valid_moves()
-        self.render()
+            self.message = lambda: input("Ok? ")
+        self.render(self.data, self.message)
 
     def draw_board(self):
         board = self.controller.get_board()
@@ -59,5 +62,6 @@ _____|_____|_____
         return f"""Incorrect input.\nProvide input corresponding to the following grid:
                 {self.format_board(self.controller.valid_moves)}"""
 
-    def render(self):
-        print(self.data)
+    def render(self, board_state, message_func):
+        print(board_state)
+        message_func()

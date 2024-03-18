@@ -4,6 +4,11 @@ from model import Model
 from controller import Controller
 from view import View
 
+class GameState:
+    def __init__(self):
+        self.state_name = None
+        self.state_val = None
+
 class Game:
 
     def __init__(self):
@@ -11,12 +16,24 @@ class Game:
         self.controller = Controller(self.model)
         self.view = View(self.controller)
         self.loop()
+        self.state = GameState()
 
     def set_state(self, state):
-        if state == "showing_winner":
+        if state == "WIN":
             self.view.set_state("showing_winner")
-        if state == "showing_tie":
+            exit()
+        if state == "TIE":
             self.view.set_state("showing_tie")
+            exit()
+        if state == "QUIT":
+            exit()
+        if state == "PLAY":
+            os.system("clear")
+            self.view.set_state("showing_board")
+        if state == "HELP":
+            os.system("clear")
+            self.view.set_state("showing_help")
+        
     def loop(self):
         # Game states
         # * Prompting user to move
@@ -27,27 +44,13 @@ class Game:
         # * Display game result (win or tie)
         winner_or_tie = False
         while not winner_or_tie:
-            os.system("clear")
-            self.view.set_state("showing_board")
-            self.view.set_state("prompting_user")
-            res = self.controller.get_move()
-            if not res:
-                os.system("clear")
-                self.view.set_state("showing_help")
-                self.view.set_state("prompting_user")
-                res = self.controller.get_move()
+            self.set_state("PLAY")
+            if self.state.state_name == "HELP":
+                self.set_state("HELP")
+            elif self.state.state_name == "TRY_AGAIN":
+                self.set_state("PLAY")
             else:
                 self.controller.update_board(res)
-                # Here we can implement controller states: play, win, tie
                 result = self.controller.check_for_win_or_tie()
-                if result:
-                    winner_or_tie = result
-                    os.system("clear")
-                    self.view.set_state("showing_board")
-                if result == "WIN":
-                    self.view.set_state("showing_winner")
-                    break
-                elif result == "TIE":
-                    self.view.set_state("showing_tie")
-                    break
+                self.set_state(result)
                 self.controller.switch_players()

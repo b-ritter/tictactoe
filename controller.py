@@ -26,7 +26,6 @@ class Controller:
         return False
         
     def check_for_win(self):
-        # Check rows and diagonals for all x or all o
         res = False
         for i in range(0,3):
             row = self.model.get_row(i)
@@ -50,11 +49,11 @@ class Controller:
             return True
 
     def check_for_win_or_tie(self):
-        if self.check_for_tie():
-            return "TIE"
         if self.check_for_win():
             return "WIN"
-        return False
+        if self.check_for_tie():
+            return "TIE"
+        return "PLAY"
 
     def get_current_player(self):
         return self.current_player_idx
@@ -84,26 +83,30 @@ class Controller:
         col = col_map.get(col)
         return row, col
 
-    def get_move(self):
-        res = input()
-        if not self.is_valid_move(res): 
-            return False
+    def get_move(self, msg):
+        res = input(msg)
+        row, col = self.parse_move(res)
+        if self.is_invalid_move(res):
+            return "ERROR"
+        elif self.is_space_occupied(row, col):
+            return "TRY_AGAIN"
         else:
-            return res 
+            return row, col
 
-    def is_valid_move(self, move_cmd):
-        if not self.is_move_cmd(move_cmd):
+    def is_space_occupied(self, row, col):  
+        if not self.model.get_val(row, col) == self.model.null_value:
+            return True
+        return False
+    
+    def is_invalid_move(self, move_cmd):
+        if self.is_move_cmd(move_cmd):
             return False 
-        row, col = self.parse_move(move_cmd)        
-        if not self.model.get_val(row, col) == 0:
-            return False
-        return (row, col) 
+        return True
 
     def get_board(self):
         return self.model.get_board()
     
     def update_board(self, res):
-        # could this 'listen' for updates, like an observable?
         row, col = self.parse_move(res)
         player = self.get_current_player()
         self.model.update_board(row, col, player)

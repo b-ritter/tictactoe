@@ -3,7 +3,8 @@ class Model:
     def __init__(self):
         self.num_rows = 3
         self.num_cols = 3
-        self.board = [0]*self.num_rows*self.num_cols
+        self.null_value = 0
+        self.board = [self.null_value]*self.num_rows*self.num_cols
 
         self.player_map = ['X','Y']
 

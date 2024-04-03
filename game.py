@@ -3,6 +3,7 @@ import os
 from model import Model
 from controller import Controller
 from view import View
+from states import GameStates as g
 
 class Game:
 
@@ -13,18 +14,20 @@ class Game:
         self.loop()
 
     def loop(self):
-        state = "PLAY"
-        while state != "WIN" or state != "TIE":
+        state = g.PLAY
+        while state != g.WIN or state != g.TIE:
             os.system("clear")
-            if state == "PLAY":
+            if state == g.PLAY:
                 state = self.controller.get_move()
-            elif state == "INVALID_INPUT":
+            elif state == g.INVALID_INPUT:
                 state = self.controller.show_help()
-            elif state == "INVALID_MOVE":
+            elif state == g.HELP:
+                state = self.controller.show_help()
+            elif state == g.INVALID_MOVE:
                 state = self.controller.get_move()
-            elif state == "WIN":
+            elif state == g.WIN:
                 state = self.controller.show_win()
-            elif state == "TIE":
+            elif state == g.TIE:
                 state = self.controller.show_tie()
-            elif state == "EXIT":
+            elif state == g.EXIT:
                 exit()

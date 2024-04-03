@@ -1,3 +1,5 @@
+from states import GameStates as g
+
 class Model:
 
     def __init__(self):
@@ -76,7 +78,6 @@ class Model:
         return False
         
     def check_for_win(self):
-        # Check rows and diagonals for all x or all o
         res = False
         for i in range(0,3):
             row = self.get_row(i)
@@ -101,10 +102,10 @@ class Model:
 
     def check_for_win_or_tie(self):
         if self.check_for_tie():
-            return "TIE"
+            return g.TIE
         if self.check_for_win():
-            return "WIN"
-        return "PLAY"
+            return g.WIN
+        return g.PLAY
 
     def get_current_player_value(self):
         return self.players[self.get_current_player()]
@@ -129,16 +130,18 @@ class Model:
         col = col_map.get(col)
         return row, col
 
-    def hanlde_move(self, move_cmd):
+    def hanlde_move(self, move_cmd: str):
+        if move_cmd.lower() == 'h':
+            return g.HELP
         if not self.is_move_cmd(move_cmd):
-            return "INVALID_INPUT"
+            return g.INVALID_INPUT
         row, col = self.parse_move(move_cmd)
         if not self.get_val(row, col) == 0:
-            return "INVALID_MOVE"
+            return g.INVALID_MOVE
         self.update_board(row, col, self.get_current_player())
         result = self.check_for_win_or_tie()
         
-        if result in ["WIN", "TIE"]:
+        if result in [g.WIN, g.TIE]:
             return result
         else:
             self.switch_players()

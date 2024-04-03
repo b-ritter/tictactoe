@@ -1,8 +1,6 @@
 from copy import deepcopy
 
 class View:
-    data = None
-
     def transform_board(self, data):
         data_ = deepcopy(data)
         for i, row in enumerate(data_):
@@ -28,15 +26,6 @@ _____|_____|_____
 """
         return rep
 
-    def prompt_next_move(self, player):
-        return f"Player {player} choose your move: "
-
-    def prompt_ok(self):
-        return "Ok?"
-
-    def show_valid_moves(self, moves):
-        return f"""Incorrect input.\nProvide input corresponding to the following grid:
-                {self.format_board(moves)}"""
-
-    def render(self, data):
+    def render(self, data, msg):
         print(self.format_board(data))
+        return input(msg)

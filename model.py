@@ -1,13 +1,24 @@
+from states import GameStates as g
 
 class Model:
+
     def __init__(self):
         self.num_rows = 3
         self.num_cols = 3
-        self.board = [0]*self.num_rows*self.num_cols
+        self.board = self.new_board()
 
-        self.player_map = ['X','Y']
+        self.current_player = 0
 
-        self.history = []
+        self.players = ['X','O']
+
+        self.valid_moves = [
+                ["a1", "a2", "a3"],
+                ["b1", "b2", "b3"],
+                ["c1", "c2", "c3"]
+                ]
+
+    def new_board(self):
+        return [0]*self.num_rows*self.num_cols
 
     def is_full(self):
         return all(self.board)
@@ -59,5 +70,82 @@ class Model:
         return board
     
     def update_board(self, row, col, player):
-        self.history.append(self.board)
-        self.set_val(row, col, self.player_map[player])
+        self.set_val(row, col, self.players[player])
+    
+    def check_grid(self, board_slice):
+        if all(board_slice) and (board_slice[0] == board_slice[1] == board_slice[2]):
+            return True
+        return False
+        
+    def check_for_win(self):
+        res = False
+        for i in range(0,3):
+            row = self.get_row(i)
+            res = self.check_grid(row)
+            if(res):
+                return True 
+        for i in range(0,3):
+            col = self.get_col(i)
+            res = self.check_grid(col)
+            if(res):
+                return True 
+        for i in range(0,2):
+            diag = self.get_diag(i)
+            res = self.check_grid(diag)
+            if(res):
+                return True 
+        return False
+    
+    def check_for_tie(self):
+        if self.is_full():
+            return True
+
+    def check_for_win_or_tie(self):
+        if self.check_for_tie():
+            return g.TIE
+        if self.check_for_win():
+            return g.WIN
+        return g.PLAY
+
+    def get_current_player_value(self):
+        return self.players[self.get_current_player()]
+
+    def get_current_player(self):
+        return self.current_player
+    
+    def set_current_player(self, player):
+        self.current_player = player
+
+    def switch_players(self):
+        self.set_current_player(1) if self.get_current_player() == 0 else self.set_current_player(0)
+
+    def is_move_cmd(self, move_cmd):
+        return move_cmd in set([el for row in self.valid_moves for el in row])
+        
+    def parse_move(self, move_cmd):
+        row, col = move_cmd[0], move_cmd[1]
+        row_map = {'a': 0, 'b': 1, 'c': 2}
+        col_map = {'1': 0, '2': 1, '3': 2}
+        row = row_map.get(row)
+        col = col_map.get(col)
+        return row, col
+
+    def hanlde_move(self, move_cmd: str):
+        if move_cmd.lower() == 'h':
+            return g.HELP
+        if not self.is_move_cmd(move_cmd):
+            return g.INVALID_INPUT
+        row, col = self.parse_move(move_cmd)
+        if not self.get_val(row, col) == 0:
+            return g.INVALID_MOVE
+        self.update_board(row, col, self.get_current_player())
+        result = self.check_for_win_or_tie()
+        
+        if result in [g.WIN, g.TIE]:
+            return result
+        else:
+            self.switch_players()
+            return result
+    
+    def reset(self):
+        self.board = self.new_board()

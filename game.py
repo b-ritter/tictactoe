@@ -24,7 +24,7 @@ class Game:
             elif state == g.HELP:
                 state = self.controller.show_help()
             elif state == g.INVALID_MOVE:
-                state = self.controller.get_move()
+                state = self.controller.get_move(oops=True)
             elif state == g.WIN:
                 state = self.controller.show_win()
             elif state == g.TIE:

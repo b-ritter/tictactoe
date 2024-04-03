@@ -5,9 +5,13 @@ class Controller:
         self.model = model
         self.view = view
 
-    def get_move(self):
+    def get_move(self, oops=False):
         self.view.render(self.model.get_board())
-        move = input(f"Player {self.model.get_current_player_value()}'s move: ")
+        msg = ""
+        if oops:
+            msg = f"Oops, that space is  occupied. "
+        msg += f"Player {self.model.get_current_player_value()}'s move: "
+        move = input(msg)
         return self.model.hanlde_move(move)
     
     def show_help(self):

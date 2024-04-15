@@ -6,6 +6,9 @@ This implementation of tic-tac-toe is a simple, terminal based Python applicatio
 ## Instructions
 Clone the repository. You'll need a python3 environment to run the script. From the `tictactoe` directory run `python3 main.py`. Instructions are shown in the prompts. To show help, press the `h` key at any prompt.
 
+## Testing
+Test description tk
+
 ## Design
 This implementation leverages two design patterns: Model View Controller and a Finite State Machine. I chose to use the [MVC pattern](https://course.ccs.neu.edu/cs5010f18/lecture10.html) based on my experience with Front End development. At the time, Udacity taught front-end web programming by implementing a simple MVC framework from scratch. This lesson was super important in my transition from an "artist who codes" to a software engineer. Using powerful abstractions allows the programmer to do more, with less effort and strain. Likewise, another project called for us to implemnent the arcade game [Frogger](https://en.wikipedia.org/wiki/Frogger) in JavaScript. Here, the Finite State Machine abstraction served a similar purpose. Reasoning through the logic of the game as a series of discrete states allows one to disentagle heaps of ["spaghetti code."](https://en.wikipedia.org/wiki/Spaghetti_code#:~:text=Spaghetti%20code%20is%20a%20pejorative,with%20insufficient%20ability%20or%20experience.)
 

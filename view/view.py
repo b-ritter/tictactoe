@@ -1,14 +1,15 @@
 from copy import deepcopy
 from string import Template
 import itertools
+from game.states import GameStates as g
 
 class View:
     def __init__(self):
-        self.board_template = self.load_template()
+        self.board_template = self.load_board_template()
 
-    def load_template(self):
+    def load_board_template(self):
         templ = None
-        with open("./view/board_format.txt") as f:
+        with open("./view/templates/board_format.txt") as f:
             data = f.read()
             templ = Template(data)
         return templ
@@ -36,8 +37,29 @@ class View:
 
     def print_board(self, data):
         print(data)
+    
+    def get_template(self, state, msg_data):
+        if state == g.PLAY:
+            t = Template("Player ${player}'s move: ")
+            return t.substitute(msg_data)
+        elif state == g.INVALID_MOVE:
+            t = Template("Oops, that space is  occupied. Player ${player}'s move: ")
+            return t.substitute(msg_data)
+        elif state == g.WIN:
+            t = Template("Player $player wins. Play again? Type y/n ")
+            return t.substitute(msg_data)
+        elif state == g.HELP:
+            return "Valid moves. Enter q to quit. Enter any other key to continue."
+        elif state == g.QUIT:
+            return "Would you like to quit? Type y/n "
+        elif state == g.TIE:
+            return "It's a tie. Play again? Type y/n "
 
-    def render(self, data, msg):
+    def render(self, data, msg_data=None, state=None):
         self.print_board(self.format_board(data))
-        result = self.get_input(msg)
+        result = None
+        if state:
+            result = self.get_input(self.get_template(state, msg_data))
+        else:
+            result = self.get_input(msg_data)
         return result

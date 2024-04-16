@@ -131,6 +131,8 @@ class Model:
         return row, col
 
     def handle_move(self, move_cmd: str):
+        if move_cmd.lower() == 'q':
+            return g.QUIT
         if move_cmd.lower() == 'h':
             return g.HELP
         if not self.is_move_cmd(move_cmd):

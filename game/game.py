@@ -29,5 +29,7 @@ class Game:
                 state = self.controller.show_win()
             elif state == g.TIE:
                 state = self.controller.show_tie()
+            elif state == g.QUIT:
+                state = self.controller.show_quit()
             elif state == g.EXIT:
                 exit()

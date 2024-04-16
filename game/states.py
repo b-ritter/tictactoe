@@ -8,3 +8,4 @@ class GameStates(Enum):
     TIE = 5
     EXIT = 6
     HELP = 7
+    QUIT = 8

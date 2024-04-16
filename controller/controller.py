@@ -45,7 +45,7 @@ class Controller:
         if result in [g.WIN, g.TIE]:
             return result
         else:
-            self.model.switch_players()
+            self.model.set_current_player(self.model.switch_players())
             return result
 
     def show_win(self):

@@ -117,7 +117,7 @@ class Model:
         self.current_player = player
 
     def switch_players(self):
-        self.set_current_player(1) if self.get_current_player() == 0 else self.set_current_player(0)
+        return 1 if self.get_current_player() == 0 else 0
 
     def is_move_cmd(self, move_cmd):
         return move_cmd in set([el for row in self.valid_moves for el in row])

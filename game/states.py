@@ -9,3 +9,4 @@ class GameStates(Enum):
     EXIT = 6
     HELP = 7
     QUIT = 8
+    INVALID_RESPONSE = 9

@@ -12,7 +12,7 @@ class Controller:
             move = self.view.render(self.model.get_board(), msg_data=msg_data, state=g.INVALID_MOVE)
         else:
             move = self.view.render(self.model.get_board(), msg_data=msg_data, state=g.PLAY)
-        return self.model.handle_move(move)
+        return self.handle_move(move)
     
     def show_help(self):
         self.view.render(self.model.valid_moves, state=g.HELP)
@@ -24,6 +24,29 @@ class Controller:
             return g.PLAY
         elif res.lower() == 'n':
             return g.EXIT
+        elif res.lower() == 'q':
+            return g.QUIT
+        else:
+            return self.model.check_for_win_or_tie()
+
+    def handle_move(self, move_cmd: str):
+        if move_cmd.lower() == 'q':
+            return g.QUIT
+        if move_cmd.lower() == 'h':
+            return g.HELP
+        if not self.model.is_move_cmd(move_cmd):
+            return g.INVALID_INPUT
+        row, col = self.model.parse_move(move_cmd)
+        if not self.model.is_move_valid(row, col):
+            return g.INVALID_MOVE
+        self.model.update_board(row, col, self.model.get_current_player())
+        result = self.model.check_for_win_or_tie()
+        
+        if result in [g.WIN, g.TIE]:
+            return result
+        else:
+            self.model.switch_players()
+            return result
 
     def show_win(self):
         msg_data = {"player": self.model.get_current_player_value()}

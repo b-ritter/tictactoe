@@ -129,25 +129,12 @@ class Model:
         row = row_map.get(row)
         col = col_map.get(col)
         return row, col
-
-    def handle_move(self, move_cmd: str):
-        if move_cmd.lower() == 'q':
-            return g.QUIT
-        if move_cmd.lower() == 'h':
-            return g.HELP
-        if not self.is_move_cmd(move_cmd):
-            return g.INVALID_INPUT
-        row, col = self.parse_move(move_cmd)
-        if not self.get_val(row, col) == 0:
-            return g.INVALID_MOVE
-        self.update_board(row, col, self.get_current_player())
-        result = self.check_for_win_or_tie()
-        
-        if result in [g.WIN, g.TIE]:
-            return result
-        else:
-            self.switch_players()
-            return result
     
+    def is_move_valid(self, row, col):
+        if self.get_val(row, col) == 0:
+            return True
+        else:
+            return False
+
     def reset(self):
         self.board = self.new_board()

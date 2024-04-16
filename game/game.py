@@ -1,9 +1,9 @@
 import os
 
-from model import Model
-from controller import Controller
-from view import View
-from states import GameStates as g
+from model.model import Model
+from controller.controller import Controller
+from view.view import View
+from game.states import GameStates as g
 
 class Game:
 

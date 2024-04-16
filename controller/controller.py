@@ -1,4 +1,4 @@
-from states import GameStates as g
+from game.states import GameStates as g
 
 class Controller:
     def __init__(self, model, view):
@@ -11,7 +11,7 @@ class Controller:
             msg = f"Oops, that space is  occupied. "
         msg += f"Player {self.model.get_current_player_value()}'s move: "
         move = self.view.render(self.model.get_board(),msg)
-        return self.model.hanlde_move(move)
+        return self.model.handle_move(move)
     
     def show_help(self):
         self.view.render(self.model.valid_moves, "Valid moves. Press any key to continue.")

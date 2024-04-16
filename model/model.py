@@ -1,4 +1,4 @@
-from states import GameStates as g
+from game.states import GameStates as g
 
 class Model:
 
@@ -130,7 +130,7 @@ class Model:
         col = col_map.get(col)
         return row, col
 
-    def hanlde_move(self, move_cmd: str):
+    def handle_move(self, move_cmd: str):
         if move_cmd.lower() == 'h':
             return g.HELP
         if not self.is_move_cmd(move_cmd):

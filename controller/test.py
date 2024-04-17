@@ -1,5 +1,6 @@
 import unittest
 import random
+import string
 from controller import controller
 from unittest.mock import patch, MagicMock
 from game.states import GameStates as g
@@ -23,6 +24,38 @@ class TestController(unittest.TestCase):
         self.c.view.render.assert_called_with(self.c.model.valid_moves, state=g.HELP)
         self.assertEqual(res, g.PLAY)
     
+    def test_show_win(self):
+        self.c.model.get_current_player_value.return_value = 'X'
+        choice = random.choice(['y','n'])
+        self.c.view.render.return_value = choice
+        self.c.play_again = MagicMock()
+        self.c.show_win()
+        msg_data = {"player": "X"}
+        self.c.view.render.assert_called_with(self.c.model.get_board(), msg_data=msg_data, state=g.WIN)
+        self.c.play_again.assert_called_with(choice)
+    
+    def test_show_tie(self):
+        choice = random.choice(['y','n'])
+        self.c.view.render.return_value = choice
+        self.c.play_again = MagicMock()
+        self.c.show_tie()
+        self.c.view.render.assert_called_with(self.c.model.get_board(), state=g.TIE)
+        self.c.play_again.assert_called_with(choice)
+    
+    def test_show_quit(self):
+        self.c.view.render.return_value = 'y'
+        res = self.c.show_quit()
+        self.assertEqual(res, g.EXIT)
+
+        self.c.view.render.return_value = 'n'
+        res = self.c.show_quit()
+        self.assertEqual(res, g.PLAY)
+
+        rand_input = random.choice([c for c in list(string.ascii_lowercase) if c not in ['y','n']])
+        self.c.view.render.return_value = rand_input
+        res = self.c.show_quit()
+        self.assertEqual(res, g.QUIT)
+
     def test_play_again(self):
         res = self.c.play_again('y')
         self.c.model.reset.assert_called_once()

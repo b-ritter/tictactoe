@@ -175,36 +175,58 @@ class TestModel(unittest.TestCase):
         self.assertEqual(res,g.WIN)
 
     def test_get_current_player_value(self):
-        # Test the get_current_player_value function
-        pass
+        self.m.get_current_player = MagicMock()
+        self.m.get_current_player.return_value = 0
+        res = self.m.get_current_player_value()
+        self.assertEqual('X',res)
 
-    def test_get_current_player(self):
-        # Test the get_current_player function
-        pass
+        self.m.get_current_player.return_value = 1
+        res = self.m.get_current_player_value()
+        self.assertEqual('O',res)
 
-    def test_set_current_player(self):
-        # Test the set_current_player function
-        pass
+    def test_get_and_set_current_player(self):
+        res = self.m.get_current_player()
+        self.assertEqual(0,res)
+
+        self.m.set_current_player(1)
+        res = self.m.get_current_player()
+        self.assertEqual(1,res)
 
     def test_switch_players(self):
-        # Test the switch_players function
-        pass
+        self.m.get_current_player = MagicMock()
+        self.m.get_current_player.return_value = 1
+
+        self.assertEqual(0, self.m.switch_players())
+        self.m.get_current_player.return_value = 1
+
+        self.assertEqual(0, self.m.switch_players())
+        self.m.get_current_player.return_value = 0
 
     def test_is_move_cmd(self):
-        # Test the is_move_cmd function
-        pass
+        for move in list(chain(*self.m.valid_moves)):
+            self.assertTrue(self.m.is_move_cmd(move))
+        
+        self.assertFalse(self.m.is_move_cmd("a4"))
 
     def test_parse_move(self):
-        # Test the parse_move function
-        pass
+        for move in list(chain(*self.m.valid_moves)):
+            row, col = self.m.parse_move(move)
+            self.assertEqual(move, self.m.valid_moves[row][col])
 
     def test_is_move_valid(self):
-        # Test the is_move_valid function
-        pass
+        self.m.get_val = MagicMock()
+        self.m.get_val.return_value = 0
+        self.assertTrue(self.m.is_move_valid(0,0))
+
+        self.m.get_val.return_value = 1
+        self.assertFalse(self.m.is_move_valid(0,0))
 
     def test_reset(self):
-        # Test the reset function
-        pass
+        self.m.new_board = MagicMock()
+        board = "new board"
+        self.m.new_board.return_value = board
+        self.m.reset()
+        self.assertEqual(id(self.m.board), id(board))
 
 if __name__ == '__main__':
     unittest.main()

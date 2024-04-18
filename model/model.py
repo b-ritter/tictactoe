@@ -120,16 +120,16 @@ class Model:
     def switch_players(self):
         return 1 if self.get_current_player() == 0 else 0
 
-    def is_move_cmd(self, move_cmd):
+    def is_move_cmd(self, move_cmd:str):
         return move_cmd in set([el for row in self.valid_moves for el in row])
         
-    def parse_move(self, move_cmd):
+    def parse_move(self, move_cmd:str) -> list[int]:
         row, col = move_cmd[0], move_cmd[1]
         row_map = {'a': 0, 'b': 1, 'c': 2}
         col_map = {'1': 0, '2': 1, '3': 2}
-        row = row_map.get(row)
-        col = col_map.get(col)
-        return row, col
+        row = row_map.get(row,-1)
+        col = col_map.get(col,-1)
+        return [row, col]
     
     def is_move_valid(self, row, col):
         if self.get_val(row, col) == 0:

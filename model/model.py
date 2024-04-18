@@ -1,11 +1,12 @@
-from states import GameStates as g
+from game.states import GameStates as g
+from typing import cast
 
 class Model:
 
     def __init__(self):
         self.num_rows = 3
         self.num_cols = 3
-        self.board = self.new_board()
+        self.board:list[int|str] = self.new_board()
 
         self.current_player = 0
 
@@ -17,8 +18,8 @@ class Model:
                 ["c1", "c2", "c3"]
                 ]
 
-    def new_board(self):
-        return [0]*self.num_rows*self.num_cols
+    def new_board(self) -> list[int|str]:
+        return cast(list[int|str],[0]*self.num_rows*self.num_cols)
 
     def is_full(self):
         return all(self.board)
@@ -117,35 +118,24 @@ class Model:
         self.current_player = player
 
     def switch_players(self):
-        self.set_current_player(1) if self.get_current_player() == 0 else self.set_current_player(0)
+        return 1 if self.get_current_player() == 0 else 0
 
-    def is_move_cmd(self, move_cmd):
+    def is_move_cmd(self, move_cmd:str):
         return move_cmd in set([el for row in self.valid_moves for el in row])
         
-    def parse_move(self, move_cmd):
+    def parse_move(self, move_cmd:str) -> list[int]:
         row, col = move_cmd[0], move_cmd[1]
         row_map = {'a': 0, 'b': 1, 'c': 2}
         col_map = {'1': 0, '2': 1, '3': 2}
-        row = row_map.get(row)
-        col = col_map.get(col)
-        return row, col
-
-    def hanlde_move(self, move_cmd: str):
-        if move_cmd.lower() == 'h':
-            return g.HELP
-        if not self.is_move_cmd(move_cmd):
-            return g.INVALID_INPUT
-        row, col = self.parse_move(move_cmd)
-        if not self.get_val(row, col) == 0:
-            return g.INVALID_MOVE
-        self.update_board(row, col, self.get_current_player())
-        result = self.check_for_win_or_tie()
-        
-        if result in [g.WIN, g.TIE]:
-            return result
-        else:
-            self.switch_players()
-            return result
+        row = row_map.get(row,-1)
+        col = col_map.get(col,-1)
+        return [row, col]
     
+    def is_move_valid(self, row, col):
+        if self.get_val(row, col) == 0:
+            return True
+        else:
+            return False
+
     def reset(self):
         self.board = self.new_board()

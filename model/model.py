@@ -1,11 +1,12 @@
 from game.states import GameStates as g
+from typing import cast
 
 class Model:
 
     def __init__(self):
         self.num_rows = 3
         self.num_cols = 3
-        self.board = self.new_board()
+        self.board:list[int|str] = self.new_board()
 
         self.current_player = 0
 
@@ -17,8 +18,8 @@ class Model:
                 ["c1", "c2", "c3"]
                 ]
 
-    def new_board(self):
-        return [0]*self.num_rows*self.num_cols
+    def new_board(self) -> list[int|str]:
+        return cast(list[int|str],[0]*self.num_rows*self.num_cols)
 
     def is_full(self):
         return all(self.board)

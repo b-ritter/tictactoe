@@ -32,10 +32,6 @@ class TestGame(unittest.TestCase):
         self.assertTrue(res == g.WIN and self.m.get_current_player_value() == 'O')
 
     def test_tie(self):
-        tie = [
-            ["O","X","O"],
-            ["O","X","X"],
-            ["X","O","X"]]
         self.c.handle_move("a2") #X
         self.c.handle_move("a1") #O
         self.c.handle_move("b2") #X

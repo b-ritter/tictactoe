@@ -32,15 +32,15 @@ class TestGame(unittest.TestCase):
         self.assertTrue(res == g.WIN and self.m.get_current_player_value() == 'O')
 
     def test_tie(self):
-        self.c.handle_move("a2") #X
-        self.c.handle_move("a1") #O
-        self.c.handle_move("b2") #X
+        self.c.handle_move("a2")
+        self.c.handle_move("a1")
+        self.c.handle_move("b2")
 
-        self.c.handle_move("a3") #O (top row full)
-        self.c.handle_move("c1") #X
-        self.c.handle_move("b1") #O
+        self.c.handle_move("a3")
+        self.c.handle_move("c1")
+        self.c.handle_move("b1")
 
-        self.c.handle_move("c3") #X
-        self.c.handle_move("c2") #O
-        res = self.c.handle_move("b3") #X    
+        self.c.handle_move("c3")
+        self.c.handle_move("c2")
+        res = self.c.handle_move("b3") 
         self.assertTrue(res == g.TIE)
